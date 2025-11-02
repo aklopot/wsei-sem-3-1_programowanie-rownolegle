@@ -49,8 +49,10 @@ class IntegralCalculator:
         
         # Wyświetl obliczenia
         print(f"\nObliczanie całki funkcji f(x) = 1/2 * x na przedziale [{a}, {b}]")
+        print(f"Metoda: prostokąty z lewym brzegiem")
         print(f"Liczba prostokątów: {n}")
         print(f"Szerokość prostokąta (dx): {dx:.4f}")
+        
         print("\nObliczenia dla poszczególnych prostokątów:")
         print(f"{'Lp.':<6} {'Przedział x':<20} {'f(x)':<10} {'Pole':<10}")
         print("-" * 50)
@@ -61,13 +63,11 @@ class IntegralCalculator:
             x_start = a + i * dx
             # Prawa granica bieżącego prostokąta
             x_end = x_start + dx
-            # Punkt środkowy prostokąta
-            x_mid = (x_start + x_end) / 2
             
-            # Wartość funkcji w punkcie środkowym
-            f_x = self.function_1(x_mid)
+            # Wartość funkcji w lewym brzegu prostokąta
+            f_x = self.function_1(x_start)
             
-            # Pole prostokąta (używając reguły punktu środkowego)
+            # Pole prostokąta (używając reguły lewego brzegu)
             area = f_x * dx
             total_area += area
             
@@ -77,8 +77,13 @@ class IntegralCalculator:
             elif i == 10 and n > 11:
                 print(f"... ({n - 11} wierszy pominięto) ...")
         
+        # Dokładna wartość całki dla porównania (∫(1/2 * x) dx = 1/4 * x²)
+        exact_value = 0.25 * (b**2 - a**2)
         print("-" * 50)
-        print(f"Całkowita suma: {total_area:.6f}\n")
+        print(f"Całkowita suma (aproksymacja): {total_area:.6f}")
+        print(f"Dokładna wartość całki:        {exact_value:.6f}")
+        print(f"Błąd aproksymacji:             {abs(total_area - exact_value):.6f}")
+        print(f"Błąd względny:                 {abs(total_area - exact_value) / exact_value * 100:.4f}%\n")
     
     def run_task3(self):
         """

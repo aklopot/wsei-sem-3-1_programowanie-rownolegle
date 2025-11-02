@@ -10,8 +10,9 @@ Program zawiera kilka zadań obliczeniowych:
 
 2. **Kalkulator Całki Numerycznej** - Oblicza całkę numeryczną metodą prostokątów
    - Zadanie 3: Całka funkcji f(x) = 1/2 * x na przedziale [0, 2]
-   - Wykorzystuje metodę prostokątów (reguła punktu środkowego)
+   - Wykorzystuje metodę prostokątów (reguła lewego brzegu)
    - Wyświetla szczegółowe obliczenia dla każdego prostokąta
+   - Pokazuje dokładną wartość całki i błąd aproksymacji
 
 ## 🚀 Szybki start
 
