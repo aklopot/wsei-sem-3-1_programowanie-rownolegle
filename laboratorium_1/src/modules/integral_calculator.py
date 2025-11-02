@@ -34,6 +34,34 @@ class IntegralCalculator:
         """
         return 0.5 * x
     
+    def _print_calculation_header(self, a, b, n, method_description):
+        """
+        Helper method to print calculation header.
+        
+        Args:
+            a (float): Left boundary
+            b (float): Right boundary
+            n (int): Number of elements
+            method_description (str): Description of the method
+        """
+        print(f"\nObliczanie całki funkcji f(x) = 1/2 * x na przedziale [{a}, {b}]")
+        print(f"Metoda: {method_description}")
+        print(f"Liczba elementów: {n}")
+    
+    def _print_calculation_summary(self, total_area, exact_value):
+        """
+        Helper method to print calculation summary.
+        
+        Args:
+            total_area (float): Calculated integral value
+            exact_value (float): Exact integral value
+        """
+        print("-" * 50)
+        print(f"Całkowita suma (aproksymacja): {total_area:.6f}")
+        print(f"Dokładna wartość całki:        {exact_value:.6f}")
+        print(f"Błąd aproksymacji:             {abs(total_area - exact_value):.6f}")
+        print(f"Błąd względny:                 {abs(total_area - exact_value) / exact_value * 100:.4f}%\n")
+    
     def calculate_integral_rectangles(self, a, b, n, method=CalculationMethod.LEFT):
         """
         Oblicz całkę metodą prostokątów.
@@ -58,15 +86,13 @@ class IntegralCalculator:
         
         # Map method to display name
         method_names = {
-            CalculationMethod.LEFT: "lewym brzegiem",
-            CalculationMethod.CENTER: "środkiem",
-            CalculationMethod.RIGHT: "prawym brzegiem"
+            CalculationMethod.LEFT: "prostokąty z lewym brzegiem",
+            CalculationMethod.CENTER: "prostokąty ze środkiem",
+            CalculationMethod.RIGHT: "prostokąty z prawym brzegiem"
         }
         
-        # Wyświetl obliczenia
-        print(f"\nObliczanie całki funkcji f(x) = 1/2 * x na przedziale [{a}, {b}]")
-        print(f"Metoda: prostokąty z {method_names[method]}")
-        print(f"Liczba prostokątów: {n}")
+        # Print header
+        self._print_calculation_header(a, b, n, method_names[method])
         print(f"Szerokość prostokąta (dx): {dx:.4f}")
         
         print("\nObliczenia dla poszczególnych prostokątów:")
@@ -105,11 +131,7 @@ class IntegralCalculator:
         
         # Dokładna wartość całki dla porównania (∫(1/2 * x) dx = 1/4 * x²)
         exact_value = 0.25 * (b**2 - a**2)
-        print("-" * 50)
-        print(f"Całkowita suma (aproksymacja): {total_area:.6f}")
-        print(f"Dokładna wartość całki:        {exact_value:.6f}")
-        print(f"Błąd aproksymacji:             {abs(total_area - exact_value):.6f}")
-        print(f"Błąd względny:                 {abs(total_area - exact_value) / exact_value * 100:.4f}%\n")
+        self._print_calculation_summary(total_area, exact_value)
         
         return total_area
     
@@ -249,6 +271,140 @@ class IntegralCalculator:
             # Display summary
             print("=" * 80)
             print("PODSUMOWANIE WYNIKÓW - PORÓWNANIE METOD")
+            print("=" * 80)
+            print(f"\n{'Metoda':<20} {'Wartość':<15} {'Błąd bezwzgl.':<15} {'Błąd wzgl.':<15}")
+            print("-" * 80)
+            for result in results:
+                print(f"{result['method']:<20} {result['value']:<15.6f} "
+                      f"{result['error']:<15.6f} {result['error_percent']:<15.4f}%")
+            print("-" * 80)
+            print(f"Dokładna wartość: {exact_value:.6f}")
+            print()
+            
+        except Exception as e:
+            print(f"Błąd: {e}")
+    
+    def calculate_integral_trapezoids(self, a, b, n):
+        """
+        Oblicz całkę metodą trapezów.
+        
+        Args:
+            a (float): Lewa granica przedziału
+            b (float): Prawa granica przedziału
+            n (int): Liczba trapezów (podział)
+        
+        Returns:
+            float: Przybliżona wartość całki
+        """
+        if n <= 0:
+            raise ValueError("Liczba trapezów musi być większa od zera.")
+        
+        # Oblicz szerokość każdego trapezu
+        dx = (b - a) / n
+        
+        # Suma pól trapezów
+        total_area = 0.0
+        
+        # Print header
+        self._print_calculation_header(a, b, n, "trapezy")
+        print(f"Szerokość podstawy (dx): {dx:.4f}")
+        
+        print("\nObliczenia dla poszczególnych trapezów:")
+        print(f"{'Lp.':<6} {'Przedział x':<20} {'f(x_l), f(x_r)':<20} {'Pole':<10}")
+        print("-" * 60)
+        
+        # Oblicz każdy trapez
+        for i in range(n):
+            # Lewa granica bieżącego trapezu
+            x_start = a + i * dx
+            # Prawa granica bieżącego trapezu
+            x_end = x_start + dx
+            
+            # Wartości funkcji na obu końcach trapezu
+            f_left = self.function_1(x_start)
+            f_right = self.function_1(x_end)
+            
+            # Pole trapezu: (f(x_start) + f(x_end)) / 2 * dx
+            area = (f_left + f_right) / 2 * dx
+            total_area += area
+            
+            # Wyświetl obliczenia (tylko pierwsze 10 i ostatnie, jeśli jest więcej)
+            if i < 10 or i >= n - 1:
+                print(f"{i+1:<6} [{x_start:.4f}, {x_end:.4f}] "
+                      f"{f_left:.4f}, {f_right:.4f}   {area:.6f}")
+            elif i == 10 and n > 11:
+                print(f"... ({n - 11} wierszy pominięto) ...")
+        
+        # Dokładna wartość całki dla porównania (∫(1/2 * x) dx = 1/4 * x²)
+        exact_value = 0.25 * (b**2 - a**2)
+        self._print_calculation_summary(total_area, exact_value)
+        
+        return total_area
+    
+    def run_task6(self):
+        """
+        Zadanie 6: Porównanie metody prostokątów i trapezów.
+        Analizuje wpływ zmiany elementu aproksymującego (prostokąt -> trapez).
+        """
+        try:
+            # Pobierz liczbę elementów od użytkownika
+            n = InputValidator.get_positive_integer(
+                "\nPodaj liczbę elementów do aproksymacji: ",
+                "Liczba elementów musi być większa od zera."
+            )
+            
+            print("=" * 80)
+            print("ZADANIE 6 - PORÓWNANIE PROSTOKĄTÓW I TRAPEZÓW")
+            print("=" * 80)
+            print()
+            
+            # Define interval
+            a = 0
+            b = 2
+            
+            print("Funkcja: f(x) = 1/2 * x")
+            print(f"Przedział: [{a}, {b}]")
+            print(f"Liczba elementów: {n}")
+            
+            # Calculate exact value
+            exact_value = 0.25 * (b**2 - a**2)
+            print(f"Dokładna wartość całki: {exact_value:.6f}")
+            print()
+            print("=" * 80)
+            print()
+            
+            # Store results for comparison
+            results = []
+            
+            # Calculate using rectangles (left edge method)
+            print(f"{'='*80}")
+            print(f"METODA: PROSTOKĄTY (LEWA KRAWĘDŹ)")
+            print(f"{'='*80}")
+            rect_result = self.calculate_integral_rectangles(a, b, n, method=CalculationMethod.LEFT)
+            results.append({
+                'method': 'Prostokąty',
+                'value': rect_result,
+                'error': abs(rect_result - exact_value),
+                'error_percent': abs(rect_result - exact_value) / exact_value * 100
+            })
+            print()
+            
+            # Calculate using trapezoids
+            print(f"{'='*80}")
+            print(f"METODA: TRAPEZY")
+            print(f"{'='*80}")
+            trap_result = self.calculate_integral_trapezoids(a, b, n)
+            results.append({
+                'method': 'Trapezy',
+                'value': trap_result,
+                'error': abs(trap_result - exact_value),
+                'error_percent': abs(trap_result - exact_value) / exact_value * 100
+            })
+            print()
+            
+            # Display summary
+            print("=" * 80)
+            print("PODSUMOWANIE WYNIKÓW - PROSTOKĄTY VS TRAPEZY")
             print("=" * 80)
             print(f"\n{'Metoda':<20} {'Wartość':<15} {'Błąd bezwzgl.':<15} {'Błąd wzgl.':<15}")
             print("-" * 80)

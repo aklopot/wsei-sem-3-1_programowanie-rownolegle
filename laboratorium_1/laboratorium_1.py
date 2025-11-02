@@ -48,6 +48,12 @@ def main_laboratorium_1():
         display_order=5
     )
     menu.add_option(
+        '6',
+        'Porównanie prostokątów i trapezów',
+        lambda: IntegralCalculator().run_task6(),
+        display_order=6
+    )
+    menu.add_option(
         '0',
         'Wyjście',
         lambda: menu.exit(),
