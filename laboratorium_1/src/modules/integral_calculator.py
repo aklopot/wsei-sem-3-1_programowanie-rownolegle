@@ -74,13 +74,11 @@ class IntegralCalculator:
             # Wyświetl obliczenia (tylko pierwsze 10 i ostatnie, jeśli jest więcej)
             if i < 10 or i >= n - 1:
                 print(f"{i+1:<6} [{x_start:.4f}, {x_end:.4f}] {f_x:.4f}     {area:.6f}")
-            elif i == 10 and n > 12:
-                print(f"... ({n - 12} wierszy pominięto) ...")
+            elif i == 10 and n > 11:
+                print(f"... ({n - 11} wierszy pominięto) ...")
         
         print("-" * 50)
-        print(f"Całkowita suma (całka przybliżona): {total_area:.6f}\n")
-        
-        return total_area
+        print(f"Całkowita suma: {total_area:.6f}\n")
     
     def run_task3(self):
         """
@@ -96,10 +94,7 @@ class IntegralCalculator:
             # Oblicz całkę na przedziale [0, 2]
             a = 0
             b = 2
-            result = self.calculate_integral_rectangles(a, b, n)
-            
-            # Wyświetl wynik
-            print(f"Przybliżona wartość całki: {result:.6f}")
+            self.calculate_integral_rectangles(a, b, n)
             
         except Exception as e:
             print(f"Błąd: {e}")

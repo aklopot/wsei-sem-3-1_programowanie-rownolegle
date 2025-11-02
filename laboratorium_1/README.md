@@ -41,12 +41,12 @@ pip install -r requirements.txt
 python Laboratorium_1.py
 ```
 
-### 6️⃣ Uruchom testy
+### 5️⃣ Uruchom testy
 ```bash
 pytest
 ```
 
-### 7️⃣ Sprawdź pokrycie kodu
+### 6️⃣ Sprawdź pokrycie kodu
 ```bash
 pytest --cov=src --cov-report=term-missing
 ```
