@@ -51,6 +51,14 @@ class Menu:
         
         print("="*60)
     
+    @staticmethod
+    def pause_screen():
+        """
+        Pause the screen and wait for user to press Enter.
+        Displays a message asking user to press Enter to continue.
+        """
+        input("\nNaciśnij Enter, aby powrócić do menu...")
+    
     def show(self):
         """
         Wyświetl menu i rozpocznij interakcję z użytkownikiem.
@@ -70,6 +78,10 @@ class Menu:
                 choice = str(choice_int)
                 handler = self.options[choice]['handler']
                 handler() # Wykonaj handler dla wybranej opcji
+                
+                # Pause screen after task execution (except for exit option)
+                if choice != '0':
+                    self.pause_screen()
                     
             except KeyboardInterrupt:
                 print("\n\nProgram przerwany przez użytkownika.")
