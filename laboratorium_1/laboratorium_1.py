@@ -1,10 +1,5 @@
 """
 Laboratorium 1: Zadania
-Program wykonuje różne obliczenia, w tym ciąg Fibonacciego i całki numeryczne.
-Dostępne opcje:
-1. Oblicz pierwsze n elementów ciągu Fibonacciego
-2. Oblicz fragment ciągu Fibonacciego od indeksu L1 przez L2 elementów
-3. Oblicz całkę numeryczną metodą prostokątów
 """
 
 from src.modules.fibonacci_calculator import FibonacciCalculator

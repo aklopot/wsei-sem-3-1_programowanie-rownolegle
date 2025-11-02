@@ -4,15 +4,9 @@
 
 Program zawiera kilka zadań obliczeniowych:
 
-1. **Kalkulator Fibonacciego** - Oblicza elementy ciągu Fibonacciego
-   - Zadanie 1: Pierwsze n elementów ciągu
-   - Zadanie 2: Fragment ciągu od indeksu L1 przez L2 elementów
+1. **Kalkulator Fibonacciego**
 
-2. **Kalkulator Całki Numerycznej** - Oblicza całkę numeryczną metodą prostokątów
-   - Zadanie 3: Całka funkcji f(x) = 1/2 * x na przedziale [0, 2]
-   - Wykorzystuje metodę prostokątów (reguła lewego brzegu)
-   - Wyświetla szczegółowe obliczenia dla każdego prostokąta
-   - Pokazuje dokładną wartość całki i błąd aproksymacji
+2. **Kalkulator Całki Numerycznej**
 
 ## 🚀 Szybki start
 
@@ -52,6 +46,3 @@ pytest
 pytest --cov=src --cov-report=term-missing
 ```
 
----
-
-**Deaktywacja środowiska:** `deactivate`

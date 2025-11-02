@@ -27,51 +27,32 @@ class IntegralCalculator:
     def function_1(self, x):
         """
         Funkcja do całkowania: f(x) = 1/2 * x
-        
-        Args:
-            x (float): Wartość wejściowa
-        Returns:
-            float: Wartość funkcji dla x
         """
         return 0.5 * x
     
     def function_sin(self, x):
         """
         Funkcja do całkowania: f(x) = sin(x)
-        
-        Args:
-            x (float): Wartość wejściowa
-        Returns:
-            float: Wartość funkcji dla x
         """
         return math.sin(x)
     
     def function_quadratic(self, x, a, b, c):
         """
         Funkcja do całkowania: f(x) = ax² + bx + c
-        
-        Args:
-            x (float): Wartość wejściowa
-            a (float): Współczynnik przy x²
-            b (float): Współczynnik przy x
-            c (float): Wyraz wolny
-        Returns:
-            float: Wartość funkcji dla x
         """
         return a * x**2 + b * x + c
     
     def _get_exact_integral_linear(self, a, b):
-        """Calculate exact integral for f(x) = 1/2 * x"""
+        """f(x) = 1/2 * x"""
         return 0.25 * (b**2 - a**2)
     
     def _get_exact_integral_sin(self, a, b):
-        """Calculate exact integral for f(x) = sin(x): -cos(b) + cos(a)"""
+        """f(x) = sin(x): -cos(b) + cos(a)"""
         return -math.cos(b) + math.cos(a)
     
     def _get_exact_integral_quadratic(self, x_start, x_end, a, b, c):
         """
-        Calculate exact integral for f(x) = ax² + bx + c
-        ∫(ax² + bx + c)dx = (a/3)x³ + (b/2)x² + cx
+        f(x) = ax² + bx + c
         """
         def antiderivative(x):
             return (a / 3) * x**3 + (b / 2) * x**2 + c * x
@@ -80,14 +61,7 @@ class IntegralCalculator:
     
     def _print_calculation_header(self, a, b, n, method_description, func_description="f(x) = 1/2 * x"):
         """
-        Helper method to print calculation header.
-        
-        Args:
-            a (float): Left boundary
-            b (float): Right boundary
-            n (int): Number of elements
-            method_description (str): Description of the method
-            func_description (str): Description of the function being integrated
+        Wyświetl nagłówek obliczeń.
         """
         print(f"\nObliczanie całki funkcji {func_description} na przedziale [{a}, {b}]")
         print(f"Metoda: {method_description}")
@@ -95,11 +69,7 @@ class IntegralCalculator:
     
     def _print_calculation_summary(self, total_area, exact_value):
         """
-        Helper method to print calculation summary.
-        
-        Args:
-            total_area (float): Calculated integral value
-            exact_value (float): Exact integral value
+        Wyświetl podsumowanie obliczeń.
         """
         print("-" * 50)
         print(f"Całkowita suma (aproksymacja): {total_area:.6f}")
@@ -114,19 +84,7 @@ class IntegralCalculator:
     
     def _calculate_integral_rectangles_generic(self, a, b, n, method, func, func_description, exact_value):
         """
-        Generic method to calculate integral using rectangles for any function.
-        
-        Args:
-            a (float): Left boundary
-            b (float): Right boundary
-            n (int): Number of rectangles
-            method (CalculationMethod): Calculation method (LEFT, CENTER, RIGHT)
-            func (callable): Function to integrate
-            func_description (str): Description of the function
-            exact_value (float): Exact value of the integral
-        
-        Returns:
-            float: Approximated integral value
+        Oblicz całkę metodą prostokątów dla dowolnej funkcji.
         """
         if n <= 0:
             raise ValueError("Liczba prostokątów musi być większa od zera.")
@@ -173,20 +131,6 @@ class IntegralCalculator:
         return total_area
     
     def _calculate_integral_trapezoids_generic(self, a, b, n, func, func_description, exact_value):
-        """
-        Generic method to calculate integral using trapezoids for any function.
-        
-        Args:
-            a (float): Left boundary
-            b (float): Right boundary
-            n (int): Number of trapezoids
-            func (callable): Function to integrate
-            func_description (str): Description of the function
-            exact_value (float): Exact value of the integral
-        
-        Returns:
-            float: Approximated integral value
-        """
         if n <= 0:
             raise ValueError("Liczba trapezów musi być większa od zera.")
         
@@ -222,15 +166,6 @@ class IntegralCalculator:
     def calculate_integral_rectangles(self, a, b, n, method=CalculationMethod.LEFT):
         """
         Oblicz całkę metodą prostokątów dla funkcji f(x) = 1/2 * x.
-        
-        Args:
-            a (float): Lewa granica przedziału
-            b (float): Prawa granica przedziału
-            n (int): Liczba prostokątów (podział)
-            method (CalculationMethod): Metoda obliczania (LEFT, CENTER, RIGHT)
-        
-        Returns:
-            float: Przybliżona wartość całki
         """
         exact_value = self._get_exact_integral_linear(a, b)
         return self._calculate_integral_rectangles_generic(
@@ -242,7 +177,6 @@ class IntegralCalculator:
         Zadanie 3: Oblicz numeryczną wartość całki metodą prostokątów.
         """
         try:
-            # Pobierz liczbę prostokątów od użytkownika
             n = InputValidator.get_positive_integer(
                 "\nPodaj liczbę prostokątów (elementów) do aproksymacji: ",
                 "Liczba prostokątów musi być większa od zera."
@@ -389,14 +323,6 @@ class IntegralCalculator:
     def calculate_integral_trapezoids(self, a, b, n):
         """
         Oblicz całkę metodą trapezów dla funkcji f(x) = 1/2 * x.
-        
-        Args:
-            a (float): Lewa granica przedziału
-            b (float): Prawa granica przedziału
-            n (int): Liczba trapezów (podział)
-        
-        Returns:
-            float: Przybliżona wartość całki
         """
         exact_value = self._get_exact_integral_linear(a, b)
         return self._calculate_integral_trapezoids_generic(
@@ -409,7 +335,6 @@ class IntegralCalculator:
         Analizuje wpływ zmiany elementu aproksymującego (prostokąt -> trapez).
         """
         try:
-            # Pobierz liczbę elementów od użytkownika
             n = InputValidator.get_positive_integer(
                 "\nPodaj liczbę elementów do aproksymacji: ",
                 "Liczba elementów musi być większa od zera."
@@ -435,10 +360,8 @@ class IntegralCalculator:
             print("=" * 80)
             print()
             
-            # Store results for comparison
             results = []
-            
-            # Calculate using rectangles (left edge method)
+
             print(f"{'='*80}")
             print(f"METODA: PROSTOKĄTY (LEWA KRAWĘDŹ)")
             print(f"{'='*80}")
@@ -451,7 +374,6 @@ class IntegralCalculator:
             })
             print()
             
-            # Calculate using trapezoids
             print(f"{'='*80}")
             print(f"METODA: TRAPEZY")
             print(f"{'='*80}")
@@ -464,7 +386,6 @@ class IntegralCalculator:
             })
             print()
             
-            # Display summary
             print("=" * 80)
             print("PODSUMOWANIE WYNIKÓW - PROSTOKĄTY VS TRAPEZY")
             print("=" * 80)
