@@ -81,7 +81,12 @@ class IntegralCalculator:
         print(f"Całkowita suma (aproksymacja): {total_area:.6f}")
         print(f"Dokładna wartość całki:        {exact_value:.6f}")
         print(f"Błąd aproksymacji:             {abs(total_area - exact_value):.6f}")
-        print(f"Błąd względny:                 {abs(total_area - exact_value) / exact_value * 100:.4f}%\n")
+        
+        if exact_value != 0:
+            error_percent = abs(total_area - exact_value) / abs(exact_value) * 100
+            print(f"Błąd względny:                 {error_percent:.4f}%\n")
+        else:
+            print(f"Błąd względny:                 N/A (wartość dokładna = 0)\n")
     
     def _calculate_integral_rectangles_generic(self, a, b, n, method, func, func_description, exact_value):
         """
@@ -476,7 +481,7 @@ class IntegralCalculator:
             print(f"Przedział: [0, 2π] = [0, {b:.4f}]")
             print(f"Liczba elementów: {n}")
             
-            # Calculate exact value: ∫sin(x)dx = -cos(x), from 0 to 2π
+            # Calculate exact value: ∫sin(x)dx = -cos(x), from 0 to 2π = -cos(2π) + cos(0) = -1 + 1 = 0
             exact_value = self._get_exact_integral_sin(a, b)
             print(f"Dokładna wartość całki: {exact_value:.6f}")
             print()
