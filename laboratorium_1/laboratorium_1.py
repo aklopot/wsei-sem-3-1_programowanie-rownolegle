@@ -54,6 +54,12 @@ def main_laboratorium_1():
         display_order=6
     )
     menu.add_option(
+        '7',
+        'Oblicz całkę funkcji y=sin(x) na przedziale [0, 2π]',
+        lambda: IntegralCalculator().run_task7(),
+        display_order=7
+    )
+    menu.add_option(
         '0',
         'Wyjście',
         lambda: menu.exit(),
