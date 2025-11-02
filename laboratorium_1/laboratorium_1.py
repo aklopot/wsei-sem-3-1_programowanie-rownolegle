@@ -60,6 +60,12 @@ def main_laboratorium_1():
         display_order=7
     )
     menu.add_option(
+        '8',
+        'Oblicz całkę funkcji y=ax²+bx+c (parametry podaje użytkownik)',
+        lambda: IntegralCalculator().run_task8(),
+        display_order=8
+    )
+    menu.add_option(
         '0',
         'Wyjście',
         lambda: menu.exit(),

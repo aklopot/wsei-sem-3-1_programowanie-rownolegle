@@ -46,6 +46,20 @@ class IntegralCalculator:
         """
         return math.sin(x)
     
+    def function_quadratic(self, x, a, b, c):
+        """
+        Funkcja do całkowania: f(x) = ax² + bx + c
+        
+        Args:
+            x (float): Wartość wejściowa
+            a (float): Współczynnik przy x²
+            b (float): Współczynnik przy x
+            c (float): Wyraz wolny
+        Returns:
+            float: Wartość funkcji dla x
+        """
+        return a * x**2 + b * x + c
+    
     def _get_exact_integral_linear(self, a, b):
         """Calculate exact integral for f(x) = 1/2 * x"""
         return 0.25 * (b**2 - a**2)
@@ -53,6 +67,16 @@ class IntegralCalculator:
     def _get_exact_integral_sin(self, a, b):
         """Calculate exact integral for f(x) = sin(x): -cos(b) + cos(a)"""
         return -math.cos(b) + math.cos(a)
+    
+    def _get_exact_integral_quadratic(self, x_start, x_end, a, b, c):
+        """
+        Calculate exact integral for f(x) = ax² + bx + c
+        ∫(ax² + bx + c)dx = (a/3)x³ + (b/2)x² + cx
+        """
+        def antiderivative(x):
+            return (a / 3) * x**3 + (b / 2) * x**2 + c * x
+        
+        return antiderivative(x_end) - antiderivative(x_start)
     
     def _print_calculation_header(self, a, b, n, method_description, func_description="f(x) = 1/2 * x"):
         """
@@ -524,6 +548,106 @@ class IntegralCalculator:
             # Display summary
             print("=" * 80)
             print("PODSUMOWANIE WYNIKÓW - CAŁKA sin(x)")
+            print("=" * 80)
+            print(f"\n{'Metoda':<25} {'Wartość':<15} {'Błąd bezwzgl.':<15} {'Błąd wzgl.':<15}")
+            print("-" * 80)
+            for result in results:
+                print(f"{result['method']:<25} {result['value']:<15.6f} "
+                      f"{result['error']:<15.6f} {result['error_percent']:<15.4f}%")
+            print("-" * 80)
+            print(f"Dokładna wartość: {exact_value:.6f}")
+            print()
+            
+        except Exception as e:
+            print(f"Błąd: {e}")
+    
+    def run_task8(self):
+        """
+        Zadanie 8: Oblicz całkę funkcji y = ax² + bx + c.
+        Parametry a, b, c podawane przez użytkownika.
+        """
+        try:
+            print("=" * 80)
+            print("ZADANIE 8 - CAŁKA FUNKCJI KWADRATOWEJ y = ax² + bx + c")
+            print("=" * 80)
+            print()
+            
+            # Get coefficients from user
+            print("Podaj współczynniki funkcji kwadratowej y = ax² + bx + c:")
+            a_coef = InputValidator.get_float("\nWspółczynnik a: ")
+            b_coef = InputValidator.get_float("Współczynnik b: ")
+            c_coef = InputValidator.get_float("Współczynnik c: ")
+            
+            # Get interval from user
+            print("\nPodaj przedział całkowania [x_start, x_end]:")
+            x_start = InputValidator.get_float("x_start: ")
+            x_end = InputValidator.get_float("x_end: ")
+            
+            if x_start >= x_end:
+                print("Błąd: x_start musi być mniejsze od x_end")
+                return
+            
+            # Get number of elements
+            n = InputValidator.get_positive_integer(
+                "\nPodaj liczbę elementów do aproksymacji: ",
+                "Liczba elementów musi być większa od zera."
+            )
+            
+            print()
+            print("=" * 80)
+            
+            # Display function
+            func_str = f"f(x) = {a_coef}x² + {b_coef}x + {c_coef}"
+            print(f"Funkcja: {func_str}")
+            print(f"Przedział: [{x_start}, {x_end}]")
+            print(f"Liczba elementów: {n}")
+            
+            # Calculate exact value
+            exact_value = self._get_exact_integral_quadratic(x_start, x_end, a_coef, b_coef, c_coef)
+            print(f"Dokładna wartość całki: {exact_value:.6f}")
+            print()
+            print("=" * 80)
+            print()
+            
+            # Store results for comparison
+            results = []
+            
+            # Create a lambda function with fixed coefficients
+            quad_func = lambda x: self.function_quadratic(x, a_coef, b_coef, c_coef)
+            
+            # Calculate using rectangles (center method)
+            print(f"{'='*80}")
+            print(f"METODA: PROSTOKĄTY (ŚRODEK)")
+            print(f"{'='*80}")
+            rect_result = self._calculate_integral_rectangles_generic(
+                x_start, x_end, n, CalculationMethod.CENTER, quad_func, func_str, exact_value
+            )
+            results.append({
+                'method': 'Prostokąty (środek)',
+                'value': rect_result,
+                'error': abs(rect_result - exact_value),
+                'error_percent': abs(rect_result - exact_value) / abs(exact_value) * 100 if exact_value != 0 else 0
+            })
+            print()
+            
+            # Calculate using trapezoids
+            print(f"{'='*80}")
+            print(f"METODA: TRAPEZY")
+            print(f"{'='*80}")
+            trap_result = self._calculate_integral_trapezoids_generic(
+                x_start, x_end, n, quad_func, func_str, exact_value
+            )
+            results.append({
+                'method': 'Trapezy',
+                'value': trap_result,
+                'error': abs(trap_result - exact_value),
+                'error_percent': abs(trap_result - exact_value) / abs(exact_value) * 100 if exact_value != 0 else 0
+            })
+            print()
+            
+            # Display summary
+            print("=" * 80)
+            print("PODSUMOWANIE WYNIKÓW - FUNKCJA KWADRATOWA")
             print("=" * 80)
             print(f"\n{'Metoda':<25} {'Wartość':<15} {'Błąd bezwzgl.':<15} {'Błąd wzgl.':<15}")
             print("-" * 80)
