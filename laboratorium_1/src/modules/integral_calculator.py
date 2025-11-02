@@ -84,6 +84,8 @@ class IntegralCalculator:
         print(f"Dokładna wartość całki:        {exact_value:.6f}")
         print(f"Błąd aproksymacji:             {abs(total_area - exact_value):.6f}")
         print(f"Błąd względny:                 {abs(total_area - exact_value) / exact_value * 100:.4f}%\n")
+        
+        return total_area
     
     def run_task3(self):
         """
@@ -103,3 +105,61 @@ class IntegralCalculator:
             
         except Exception as e:
             print(f"Błąd: {e}")
+    
+    def run_task4(self):
+        """
+        Zadanie 4: Analiza wpływu liczby elementów na dokładność.
+        Porównuje dokładność dla różnych liczb prostokątów (n=3, 7, 13).
+        """
+        print("=" * 60)
+        print("ZADANIE 4 - WPŁYW LICZBY ELEMENTÓW NA DOKŁADNOŚĆ")
+        print("=" * 60)
+        print()
+        
+        # Test with different numbers of rectangles
+        test_values = [3, 7, 13]
+        
+        # Define interval
+        a = 0
+        b = 2
+        
+        print("Funkcja: f(x) = 1/2 * x")
+        print(f"Przedział: [{a}, {b}]")
+        print("Metoda: prostokąty z lewym brzegiem")
+        
+        # Calculate exact value
+        exact_value = 0.25 * (b**2 - a**2)
+        print(f"Dokładna wartość całki: {exact_value:.6f}")
+        print()
+        print("=" * 60)
+        print()
+        
+        # Store results for comparison
+        results = []
+        
+        # Calculate for each test value
+        for n in test_values:
+            print(f"{'='*60}")
+            print(f"TEST DLA n = {n} PROSTOKĄTÓW")
+            print(f"{'='*60}")
+            result = self.calculate_integral_rectangles(a, b, n)
+            results.append({
+                'n': n,
+                'value': result,
+                'error': abs(result - exact_value),
+                'error_percent': abs(result - exact_value) / exact_value * 100
+            })
+            print()
+        
+        # Display summary
+        print("=" * 60)
+        print("PODSUMOWANIE WYNIKÓW")
+        print("=" * 60)
+        print(f"\n{'n':<10} {'Wartość':<15} {'Błąd bezwzgl.':<15} {'Błąd wzgl.':<15}")
+        print("-" * 60)
+        for result in results:
+            print(f"{result['n']:<10} {result['value']:<15.6f} "
+                  f"{result['error']:<15.6f} {result['error_percent']:<15.4f}%")
+        print("-" * 60)
+        print(f"Dokładna wartość: {exact_value:.6f}")
+        print()

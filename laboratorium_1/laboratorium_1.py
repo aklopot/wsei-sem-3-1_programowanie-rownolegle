@@ -36,6 +36,12 @@ def main_laboratorium_1():
         display_order=3
     )
     menu.add_option(
+        '4',
+        'Analiza wpływu liczby elementów na dokładność całki (n=3,7,13)',
+        lambda: IntegralCalculator().run_task4(),
+        display_order=4
+    )
+    menu.add_option(
         '0',
         'Wyjście',
         lambda: menu.exit(),
