@@ -3,7 +3,15 @@ Moduł do obliczania całek numerycznych
 Zawiera klasę IntegralCalculator do obliczania całek metodą prostokątów.
 """
 
+from enum import Enum
 from src.validators.input_validator import InputValidator
+
+
+class CalculationMethod(Enum):
+    """Enum representing different methods for calculating integral using rectangles."""
+    LEFT = "left"
+    CENTER = "center"
+    RIGHT = "right"
 
 
 class IntegralCalculator:
@@ -26,7 +34,7 @@ class IntegralCalculator:
         """
         return 0.5 * x
     
-    def calculate_integral_rectangles(self, a, b, n):
+    def calculate_integral_rectangles(self, a, b, n, method=CalculationMethod.LEFT):
         """
         Oblicz całkę metodą prostokątów.
         
@@ -34,6 +42,7 @@ class IntegralCalculator:
             a (float): Lewa granica przedziału
             b (float): Prawa granica przedziału
             n (int): Liczba prostokątów (podział)
+            method (CalculationMethod): Metoda obliczania (LEFT, CENTER, RIGHT)
         
         Returns:
             float: Przybliżona wartość całki
@@ -47,9 +56,16 @@ class IntegralCalculator:
         # Suma pól prostokątów
         total_area = 0.0
         
+        # Map method to display name
+        method_names = {
+            CalculationMethod.LEFT: "lewym brzegiem",
+            CalculationMethod.CENTER: "środkiem",
+            CalculationMethod.RIGHT: "prawym brzegiem"
+        }
+        
         # Wyświetl obliczenia
         print(f"\nObliczanie całki funkcji f(x) = 1/2 * x na przedziale [{a}, {b}]")
-        print(f"Metoda: prostokąty z lewym brzegiem")
+        print(f"Metoda: prostokąty z {method_names[method]}")
         print(f"Liczba prostokątów: {n}")
         print(f"Szerokość prostokąta (dx): {dx:.4f}")
         
@@ -64,10 +80,20 @@ class IntegralCalculator:
             # Prawa granica bieżącego prostokąta
             x_end = x_start + dx
             
-            # Wartość funkcji w lewym brzegu prostokąta
-            f_x = self.function_1(x_start)
+            # Wybierz punkt do obliczenia wartości funkcji w zależności od metody
+            if method == CalculationMethod.LEFT:
+                x_eval = x_start
+            elif method == CalculationMethod.CENTER:
+                x_eval = (x_start + x_end) / 2
+            elif method == CalculationMethod.RIGHT:
+                x_eval = x_end
+            else:
+                raise ValueError(f"Unknown calculation method: {method}")
             
-            # Pole prostokąta (używając reguły lewego brzegu)
+            # Wartość funkcji w wybranym punkcie
+            f_x = self.function_1(x_eval)
+            
+            # Pole prostokąta
             area = f_x * dx
             total_area += area
             
@@ -163,3 +189,75 @@ class IntegralCalculator:
         print("-" * 60)
         print(f"Dokładna wartość: {exact_value:.6f}")
         print()
+    
+    def run_task5(self):
+        """
+        Zadanie 5: Porównanie dokładności różnych metod obliczania całki.
+        Porównuje wyniki dla trzech metod: lewej, środka i prawej krawędzi.
+        """
+        try:
+            # Pobierz liczbę prostokątów od użytkownika
+            n = InputValidator.get_positive_integer(
+                "\nPodaj liczbę prostokątów (elementów) do aproksymacji: ",
+                "Liczba prostokątów musi być większa od zera."
+            )
+            
+            print("=" * 80)
+            print("ZADANIE 5 - PORÓWNANIE METOD OBLICZANIA CAŁKI")
+            print("=" * 80)
+            print()
+            
+            # Define interval
+            a = 0
+            b = 2
+            
+            print("Funkcja: f(x) = 1/2 * x")
+            print(f"Przedział: [{a}, {b}]")
+            print(f"Liczba prostokątów: {n}")
+            
+            # Calculate exact value
+            exact_value = 0.25 * (b**2 - a**2)
+            print(f"Dokładna wartość całki: {exact_value:.6f}")
+            print()
+            print("=" * 80)
+            print()
+            
+            # Store results for comparison
+            results = []
+            
+            # Define methods to test
+            methods = [
+                (CalculationMethod.LEFT, "Lewa krawędź"),
+                (CalculationMethod.CENTER, "Środek"),
+                (CalculationMethod.RIGHT, "Prawa krawędź")
+            ]
+            
+            # Calculate for each method
+            for method, method_name in methods:
+                print(f"{'='*80}")
+                print(f"METODA: {method_name.upper()}")
+                print(f"{'='*80}")
+                result = self.calculate_integral_rectangles(a, b, n, method=method)
+                results.append({
+                    'method': method_name,
+                    'value': result,
+                    'error': abs(result - exact_value),
+                    'error_percent': abs(result - exact_value) / exact_value * 100
+                })
+                print()
+            
+            # Display summary
+            print("=" * 80)
+            print("PODSUMOWANIE WYNIKÓW - PORÓWNANIE METOD")
+            print("=" * 80)
+            print(f"\n{'Metoda':<20} {'Wartość':<15} {'Błąd bezwzgl.':<15} {'Błąd wzgl.':<15}")
+            print("-" * 80)
+            for result in results:
+                print(f"{result['method']:<20} {result['value']:<15.6f} "
+                      f"{result['error']:<15.6f} {result['error_percent']:<15.4f}%")
+            print("-" * 80)
+            print(f"Dokładna wartość: {exact_value:.6f}")
+            print()
+            
+        except Exception as e:
+            print(f"Błąd: {e}")

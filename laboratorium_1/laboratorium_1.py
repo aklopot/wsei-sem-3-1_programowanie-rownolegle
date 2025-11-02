@@ -42,6 +42,12 @@ def main_laboratorium_1():
         display_order=4
     )
     menu.add_option(
+        '5',
+        'Porównanie metod obliczania całki (lewa, środek, prawa)',
+        lambda: IntegralCalculator().run_task5(),
+        display_order=5
+    )
+    menu.add_option(
         '0',
         'Wyjście',
         lambda: menu.exit(),
