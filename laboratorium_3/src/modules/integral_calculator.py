@@ -1,6 +1,7 @@
 """
 Moduł do obliczania całek numerycznych
 Zawiera klasę IntegralCalculator do obliczania całek metodą prostokątów.
+Laboratorium 3: Rozbudowa o różne metody wielowątkowości.
 """
 
 import math
@@ -8,6 +9,9 @@ from enum import Enum
 from src.validators.input_validator import InputValidator
 from src.modules.parallel_integral_calculator import ParallelIntegralCalculator
 from src.modules.executor_integral_calculator import ExecutorIntegralCalculator
+from src.modules.threadpool_integral_calculator import ThreadPoolIntegralCalculator
+from src.modules.background_worker_calculator import BackgroundWorkerCalculator
+from src.modules.benchmark_runner import BenchmarkRunner
 
 
 class CalculationMethod(Enum):
@@ -855,6 +859,148 @@ class IntegralCalculator:
                 calculator = ExecutorIntegralCalculator(selected_func, n)
             
             calculator.compute_all(intervals)
+        
+        except Exception as e:
+            print(f"Błąd: {e}")
+    
+    # ==================== LABORATORIUM 3 ====================
+    
+    def _get_function_choice(self):
+        """Pobiera wybór funkcji od użytkownika."""
+        print("\nWybierz funkcję do całkowania:")
+        print("1 - y = 2x + 2x²")
+        print("2 - y = 2x²")
+        print("3 - y = 2x - 3")
+        print()
+        
+        function_choice = InputValidator.get_integer_in_range(
+            "Wybierz funkcję (1-3): ",
+            1, 3,
+            "Wybierz liczbę od 1 do 3."
+        )
+        
+        functions = {
+            1: (self.function_task1_1, "y = 2x + 2x²"),
+            2: (self.function_task1_2, "y = 2x²"),
+            3: (self.function_task1_3, "y = 2x - 3")
+        }
+        
+        return functions[function_choice]
+    
+    def _get_default_intervals(self):
+        """Zwraca domyślne przedziały."""
+        return [
+            (-10, 10, "[-10,10]"),
+            (-5, 20, "[-5,20]"),
+            (-5, 0, "[-5,0]")
+        ]
+    
+    def run_thread_calculation(self):
+        """Lab 3: Obliczanie całki metodą Thread."""
+        try:
+            print("=" * 60)
+            print("OBLICZANIE CAŁKI - Thread")
+            print("=" * 60)
+            
+            selected_func, func_description = self._get_function_choice()
+            intervals = self._get_default_intervals()
+            n = 10000
+            
+            print()
+            print(f"Funkcja: {func_description}")
+            print(f"Liczba trapezów: {n}")
+            print()
+            
+            calculator = ParallelIntegralCalculator(selected_func, n)
+            calculator.compute_all(intervals)
+        
+        except Exception as e:
+            print(f"Błąd: {e}")
+    
+    def run_threadpool_calculation(self):
+        """Lab 3: Obliczanie całki metodą ThreadPool."""
+        try:
+            print("=" * 60)
+            print("OBLICZANIE CAŁKI - ThreadPool")
+            print("=" * 60)
+            
+            selected_func, func_description = self._get_function_choice()
+            intervals = self._get_default_intervals()
+            n = 10000
+            
+            print()
+            print(f"Funkcja: {func_description}")
+            print(f"Liczba trapezów: {n}")
+            print()
+            
+            calculator = ThreadPoolIntegralCalculator(selected_func, n)
+            calculator.compute_all(intervals)
+        
+        except Exception as e:
+            print(f"Błąd: {e}")
+    
+    def run_tpl_calculation(self):
+        """Lab 3: Obliczanie całki metodą TPL (Executor)."""
+        try:
+            print("=" * 60)
+            print("OBLICZANIE CAŁKI - TPL")
+            print("=" * 60)
+            
+            selected_func, func_description = self._get_function_choice()
+            intervals = self._get_default_intervals()
+            n = 10000
+            
+            print()
+            print(f"Funkcja: {func_description}")
+            print(f"Liczba trapezów: {n}")
+            print()
+            
+            calculator = ExecutorIntegralCalculator(selected_func, n)
+            calculator.compute_all(intervals)
+        
+        except Exception as e:
+            print(f"Błąd: {e}")
+    
+    def run_backgroundworker_calculation(self):
+        """Lab 3: Obliczanie całki metodą BackgroundWorker."""
+        try:
+            print("=" * 60)
+            print("OBLICZANIE CAŁKI - BackgroundWorker")
+            print("=" * 60)
+            
+            selected_func, func_description = self._get_function_choice()
+            intervals = self._get_default_intervals()
+            n = 10000
+            
+            print()
+            print(f"Funkcja: {func_description}")
+            print(f"Liczba trapezów: {n}")
+            print()
+            
+            calculator = BackgroundWorkerCalculator(selected_func, n)
+            calculator.compute_all(intervals)
+        
+        except Exception as e:
+            print(f"Błąd: {e}")
+    
+    def run_benchmark(self):
+        """Lab 3 - Zadanie 3: Porównanie wszystkich metod."""
+        try:
+            print("=" * 60)
+            print("BENCHMARK - PORÓWNANIE METOD")
+            print("=" * 60)
+            
+            selected_func, func_description = self._get_function_choice()
+            n = 10000
+            
+            print()
+            print(f"Funkcja: {func_description}")
+            print(f"Liczba trapezów: {n}")
+            print()
+            
+            runner = BenchmarkRunner(selected_func, n)
+            results = runner.run_all_benchmarks()
+            runner.display_results(results)
         
         except Exception as e:
             print(f"Błąd: {e}")

@@ -1,57 +1,34 @@
-# Laboratorium 2 - Zadania
+# Laboratorium 3
 
-## 📋 Zawartość
+Implementacja zadań z Lab 3 - rozbudowa aplikacji o metody wielowątkowości: Thread, ThreadPool, TPL, BackgroundWorker.
 
-Program zawiera zadania z programowania równoległego:
+## Mapowanie C# na Python
 
-1. **Zadanie 1** - Obliczanie całki metodą trapezów (jednowątkowo)
-2. **Zadanie 2** - Obliczanie całki równolegle (threading.Thread)
-3. **Zadanie 3** - Wybór metody (Thread vs ThreadPoolExecutor)
+| C# | Python |
+|---|---|
+| `Thread` | `threading.Thread` |
+| `ThreadPool` | `multiprocessing.pool.ThreadPool` |
+| `TPL` | `concurrent.futures.ThreadPoolExecutor` |
+| `BackgroundWorker` | Symulacja z `threading` |
 
-## 🚀 Szybki start
+## Uruchomienie
 
-### 1️⃣ Utwórz środowisko wirtualne
 ```bash
-python -m venv .venv_lab2
-```
+# Utwórz środowisko
+python -m venv .venv_lab3
 
-### 2️⃣ Aktywuj środowisko
-**Windows (PowerShell):**
-```powershell
-.\.venv_lab2\Scripts\activate
-```
+# Aktywuj (Windows PowerShell)
+.\.venv_lab3\Scripts\activate
 
-**Windows (Git Bash / MINGW64):**
-```bash
-source .venv_lab2/Scripts/activate
-```
-
-**Linux/Mac:**
-```bash
-source .venv_lab2/bin/activate
-```
-
-### 3️⃣ Zainstaluj pakiety
-```bash
+# Zainstaluj pakiety
 pip install -r requirements.txt
+
+# Uruchom
+python laboratorium_3.py
 ```
 
-### 4️⃣ Uruchom aplikację
-```bash
-python laboratorium_2.py
-```
+## Testy
 
-### 5️⃣ Uruchom testy
-```bash
-pytest
-```
-
-### 6️⃣ Uruchom testy z szczegółami
 ```bash
 pytest -v
-```
-
-### 7️⃣ Sprawdź pokrycie kodu
-```bash
-pytest --cov=src --cov-report=term-missing
 ```
